@@ -24,33 +24,50 @@ We'll use the same database as we did yesterday but this new initialization will
 * If you refresh your schemas you should see a "users", "usersContact" and "usersAddress" table
 
 ## Part 2 - Query data
-
 We are going to run a couple SQL queries and put the answers in the "Query Responses" section of this README. The query instructions are intentionally written in plain english. It's up to you to translate that into a SELECT statement.
 
 1. Get a sum of all the user_ids from the `usersAddress` table grouped by state. Enter the values for the specific states below.
-
+SELECT
+state,
+count(*) as tally
+FROM
+usersaddress
+GROUP BY state;
 2. Find the most popular area code in the `usersContact` table. 
   * Hint: SUBSTR, GROUP BY
-
+  SELECT substring(phone1, 1,3) as phone, count(*) as tally
+  from users u
+  join userscontact ua
+  on u.id = ua.user_id
+  order by tally
+  having tally > 10
+  OR
+SELECT LEFT(phone1, 3) AS areacode, COUNT(phone1) AS count 
+FROM userscontact
+GROUP BY areacode;
 3. Find the MIN first_name, the county, and a count of all users in that county for counties with more than 10 users. There will be four results. List the last one. 
   * Hint: MIN, COUNT, JOIN, GROUP BY, HAVING
-
+select min(first_name) as name, county, count(county) as tally
+from users u
+join usersaddress ua
+on u.id = ua.user_id
+group by county
+having tally > 10
 
 ## Query Responses
 
 1. Sums
-  * AK:
-  * CT
-  * TX:
-  * WY:
+  * AK: 6
+  * CT: 5
+  * TX: 32
+  * WY: 3
 
 2.
-  * Area code:
-
+  * Area code:973
 3.
-  * first_name:
-  * county:
-  * county total:
+  * first_name: Andra
+  * county: New York
+  * county total: 14
 
 
 ## Summary
